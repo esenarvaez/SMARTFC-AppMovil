@@ -38,7 +38,7 @@ class RatingStart extends Component {
         },
     ];
     UpdateRating(rating, id) {
-
+        this.data[id - 1].defaultRating = rating;
     }
     render() {
         return (
