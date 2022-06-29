@@ -222,6 +222,7 @@ class Api {
         return data2;
     }
     async updateRatingActivity(BASE_IP, dataReviews) {
+        dataReviews.push({ "id_actividad": this.props._id })
         console.log(JSON.stringify(dataReviews))
         var BASE_UPDATE_API_STUDENTS = 'http://' + BASE_IP + ':3000' + '/updateRatingActivity';
         const query2 = await fetch(`${BASE_UPDATE_API_STUDENTS}`, {

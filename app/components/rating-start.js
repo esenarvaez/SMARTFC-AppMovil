@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Modal, Button } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Modal, Button, Alert } from 'react-native';
 import API from '../../utils/api';
 import { Rating } from 'react-native-ratings';
 import { connect } from 'react-redux';
@@ -34,7 +34,7 @@ class RatingStart extends Component {
         },
         {
             id_qalify: 5,
-            Default_Rating: 2,
+            Default_Rating: 0,
             description: 'Audio'
         },
     ];
@@ -42,10 +42,31 @@ class RatingStart extends Component {
         this.data[id - 1].defaultRating = rating;
     }
     async sendReview() {
-        this.data.push({ "id_actividad": this.props._id })
-        var sendReview = await API.updateRatingActivity(this.props.ipconfig, this.data);
-        console.log("data enviada")
-        console.log(JSON.stringify(this.data))
+        if (this.validateSelectedRating()) {
+            var sendReview = await API.updateRatingActivity(this.props.ipconfig, this.data, this.props._id);
+        } else {
+            Alert.alert(
+                '',
+                'Para reseñar un video necesitas seleccionar una calificación',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false }
+            );
+        }
+    }
+
+    validateSelectedRating() {
+        let cont = 0;
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i].defaultRating > 0) {
+                cont++;
+            }
+        }
+        if (cont > 0) {
+            return true;
+        }
+        return false;
     }
     render() {
         this.state.ipconfig = this.props.ipconfig;
