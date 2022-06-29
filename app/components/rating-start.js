@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Modal, Button } from 'react-native';
 import API from '../../utils/api';
 import { Rating } from 'react-native-ratings';
+import { connect } from 'react-redux';
 class RatingStart extends Component {
-    constructor(props) {
+    constructor(props, ipconfig) {
         super(props);
     }
     state = {
         isVisible: false,
+        ipconfig: null
     }
     data = [
         {
@@ -39,7 +41,14 @@ class RatingStart extends Component {
     UpdateRating(rating, id) {
         this.data[id - 1].defaultRating = rating;
     }
+    async sendReview() {
+        this.data.push({ "id_actividad": this.props._id })
+        var sendReview = await API.updateRatingActivity(this.props.ipconfig, this.data);
+        console.log("data enviada")
+        console.log(JSON.stringify(this.data))
+    }
     render() {
+        this.state.ipconfig = this.props.ipconfig;
         return (
             <View style={styles.contentBtnReview}>
                 <TouchableOpacity
@@ -82,9 +91,7 @@ class RatingStart extends Component {
                                 />
                             </View>
                             <View style={styles.item}>
-                                <Button title="Calificar" onPress={() => {
-                                    this.setState({ isVisible: !this.state.isVisible })
-                                }}
+                                <Button title="Calificar" onPress={() => this.sendReview()}
                                 />
                             </View>
                         </View>
@@ -145,4 +152,10 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     }
 });
-export default RatingStart;
+
+function mapStateToProps(state) {
+    return {
+        ipconfig: state.videos.selectedIPConfig
+    }
+}
+export default connect(mapStateToProps)(RatingStart);

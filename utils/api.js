@@ -222,13 +222,14 @@ class Api {
         return data2;
     }
     async updateRatingActivity(BASE_IP, dataReviews) {
+        console.log(JSON.stringify(dataReviews))
         var BASE_UPDATE_API_STUDENTS = 'http://' + BASE_IP + ':3000' + '/updateRatingActivity';
         const query2 = await fetch(`${BASE_UPDATE_API_STUDENTS}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: dataReviews,
+            body: JSON.stringify(dataReviews),
         });
         const data2 = await query2.json();
         return data2;
