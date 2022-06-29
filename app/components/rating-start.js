@@ -30,7 +30,6 @@ class RatingStart extends Component {
             Default_Rating: 0,
             description: 'Motivación'
         },
-        ,
         {
             id_qalify: 5,
             Default_Rating: 2,
